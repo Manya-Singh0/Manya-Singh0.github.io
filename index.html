@@ -1,310 +1,924 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Manya Singh | Cyber System</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
-
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Manya Singh // Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Share+Tech+Mono&family=Bebas+Neue&display=swap" rel="stylesheet"/>
 <style>
-body {
-  margin:0;
-  background:#05070a;
-  color:white;
-  font-family:'Space Grotesk',sans-serif;
-  overflow-x:hidden;
+:root{
+  --bg:#04040a;
+  --bg2:#08080f;
+  --cyan:#00f5ff;
+  --purple:#bf00ff;
+  --pink:#ff0080;
+  --green:#39ff14;
+  --yellow:#ffe600;
+  --text:#c8d8e8;
+  --dim:#4a5568;
+  --panel:rgba(0,245,255,0.04);
+  --border:rgba(0,245,255,0.18);
+  --border-purple:rgba(191,0,255,0.35);
 }
-
-/* PARTICLES */
-canvas {
-  position:fixed;
-  top:0;
-  left:0;
-  z-index:-1;
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'Space Grotesk',sans-serif;
+  font-size:16px;cursor:none;overflow-x:hidden;
 }
 
 /* CURSOR */
-.cursor {
-  width:15px;height:15px;
-  border-radius:50%;
-  background:#00f7ff;
-  position:fixed;
-  pointer-events:none;
-  box-shadow:0 0 20px #00f7ff;
-  z-index:999;
+#cursor-ring{
+  position:fixed;width:28px;height:28px;
+  border:1.5px solid rgba(0,245,255,.7);
+  transform:translate(-50%,-50%) rotate(45deg);
+  pointer-events:none;z-index:9999;
+  box-shadow:0 0 14px rgba(0,245,255,.5),inset 0 0 6px rgba(0,245,255,.2);
+  transition:width .18s,height .18s;
+}
+#cursor-dot{
+  position:fixed;width:6px;height:6px;
+  background:var(--cyan);
+  transform:translate(-50%,-50%) rotate(45deg);
+  pointer-events:none;z-index:9999;
+  box-shadow:0 0 10px var(--cyan),0 0 22px rgba(0,245,255,.6);
+}
+
+/* SCANLINES */
+body::before{
+  content:'';position:fixed;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.05) 3px,rgba(0,0,0,.05) 4px);
+  pointer-events:none;z-index:1000;
+}
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-track{background:var(--bg2);}
+::-webkit-scrollbar-thumb{background:var(--cyan);}
+
+/* XP BAR */
+#xpbar{
+  position:fixed;top:0;left:0;height:2px;
+  background:linear-gradient(90deg,var(--purple),var(--cyan),var(--pink));
+  z-index:9100;width:0%;box-shadow:0 0 8px var(--cyan);transition:width .1s;
 }
 
 /* NAV */
-nav {
-  position:fixed;
-  right:20px;
-  top:50%;
-  transform:translateY(-50%);
+nav{
+  position:fixed;top:2px;left:0;right:0;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 48px;z-index:8000;
+  background:rgba(4,4,10,.9);backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(0,245,255,.09);
 }
-
-nav a {
-  display:block;
-  margin:10px 0;
-  color:#aaa;
-  text-decoration:none;
-  transition:.3s;
+.nav-logo{
+  font-family:'Bebas Neue',sans-serif;font-size:22px;
+  letter-spacing:4px;color:var(--cyan);
+  text-shadow:0 0 18px rgba(0,245,255,.6);
 }
-nav a:hover {
-  color:#00f7ff;
-  text-shadow:0 0 10px #00f7ff;
+.nav-links{display:flex;gap:30px;list-style:none;}
+.nav-links a{
+  font-family:'Share Tech Mono',monospace;font-size:11px;
+  color:var(--dim);text-decoration:none;letter-spacing:2px;text-transform:uppercase;
+  transition:color .2s;position:relative;
 }
+.nav-links a::after{
+  content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;
+  background:var(--cyan);transition:width .3s;
+}
+.nav-links a:hover{color:var(--cyan);}
+.nav-links a:hover::after{width:100%;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:none;background:none;border:none;padding:4px;}
+.hamburger span{display:block;width:24px;height:2px;background:var(--cyan);}
 
 /* HERO */
-.hero {
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
+#hero{
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  position:relative;overflow:hidden;padding:120px 40px 80px;
+}
+#hero::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(0,245,255,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,245,255,.05) 1px,transparent 1px);
+  background-size:60px 60px;
+}
+#hero::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:160px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 160'%3E%3Crect x='0' y='80' width='60' height='80' fill='%2304040a'/%3E%3Crect x='20' y='40' width='20' height='120' fill='%2304040a'/%3E%3Crect x='70' y='60' width='40' height='100' fill='%2304040a'/%3E%3Crect x='120' y='30' width='30' height='130' fill='%2304040a'/%3E%3Crect x='160' y='70' width='50' height='90' fill='%2304040a'/%3E%3Crect x='220' y='50' width='25' height='110' fill='%2304040a'/%3E%3Crect x='255' y='20' width='35' height='140' fill='%2304040a'/%3E%3Crect x='300' y='65' width='45' height='95' fill='%2304040a'/%3E%3Crect x='355' y='45' width='28' height='115' fill='%2304040a'/%3E%3Crect x='393' y='75' width='55' height='85' fill='%2304040a'/%3E%3Crect x='458' y='35' width='22' height='125' fill='%2304040a'/%3E%3Crect x='490' y='55' width='40' height='105' fill='%2304040a'/%3E%3Crect x='540' y='25' width='30' height='135' fill='%2304040a'/%3E%3Crect x='580' y='80' width='60' height='80' fill='%2304040a'/%3E%3Crect x='650' y='40' width='35' height='120' fill='%2304040a'/%3E%3Crect x='695' y='60' width='48' height='100' fill='%2304040a'/%3E%3Crect x='753' y='30' width='27' height='130' fill='%2304040a'/%3E%3Crect x='790' y='70' width='52' height='90' fill='%2304040a'/%3E%3Crect x='852' y='45' width='23' height='115' fill='%2304040a'/%3E%3Crect x='885' y='20' width='38' height='140' fill='%2304040a'/%3E%3Crect x='933' y='65' width='44' height='95' fill='%2304040a'/%3E%3Crect x='987' y='50' width='29' height='110' fill='%2304040a'/%3E%3Crect x='1026' y='75' width='56' height='85' fill='%2304040a'/%3E%3Crect x='1092' y='35' width='21' height='125' fill='%2304040a'/%3E%3Crect x='1123' y='55' width='42' height='105' fill='%2304040a'/%3E%3Crect x='1175' y='25' width='32' height='135' fill='%2304040a'/%3E%3Crect x='1217' y='80' width='58' height='80' fill='%2304040a'/%3E%3Crect x='1285' y='40' width='36' height='120' fill='%2304040a'/%3E%3Crect x='1331' y='60' width='46' height='100' fill='%2304040a'/%3E%3Crect x='1387' y='30' width='53' height='130' fill='%2304040a'/%3E%3C/svg%3E") bottom/cover no-repeat;
+  pointer-events:none;z-index:1;
+}
+.particle{
+  position:absolute;border-radius:50%;
+  animation:floatUp linear infinite;opacity:0;
+}
+@keyframes floatUp{
+  0%{transform:translateY(100vh);opacity:0;}
+  10%{opacity:.7;}90%{opacity:.7;}
+  100%{transform:translateY(-10vh);opacity:0;}
+}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:860px;}
+.hero-name{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(60px,10vw,120px);
+  letter-spacing:8px;line-height:1;color:#fff;
+  text-shadow:-3px 0 var(--pink),3px 0 var(--cyan);
+  animation:glitch 4s infinite,fadeUp .8s .1s both;
+  margin-bottom:16px;
+}
+@keyframes glitch{
+  0%,90%,100%{text-shadow:-3px 0 var(--pink),3px 0 var(--cyan);}
+  91%{text-shadow:-5px 0 var(--pink),5px 0 var(--cyan);letter-spacing:10px;}
+  93%{text-shadow:3px 0 var(--purple),-3px 0 var(--green);letter-spacing:8px;}
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.hero-tagline{
+  font-family:'Share Tech Mono',monospace;font-size:14px;
+  color:var(--cyan);letter-spacing:3px;margin-bottom:6px;
+  animation:fadeUp .8s .35s both;
+}
+.hero-sub{
+  font-family:'Share Tech Mono',monospace;font-size:13px;
+  color:var(--dim);letter-spacing:2px;margin-bottom:40px;
+  animation:fadeUp .8s .55s both;
+}
+.hero-btns{
+  display:flex;gap:20px;justify-content:center;flex-wrap:wrap;
+  animation:fadeUp .8s .75s both;
+}
+.btn-primary,.btn-secondary{
+  font-family:'Share Tech Mono',monospace;font-size:12px;
+  letter-spacing:3px;padding:14px 36px;border:none;cursor:none;
+  text-transform:uppercase;text-decoration:none;display:inline-block;transition:all .25s;
+}
+.btn-primary{
+  background:var(--cyan);color:#04040a;font-weight:700;
+  box-shadow:0 0 24px rgba(0,245,255,.35);
+}
+.btn-primary:hover{box-shadow:0 0 50px rgba(0,245,255,.65);transform:translateY(-2px);}
+.btn-secondary{
+  background:transparent;color:var(--purple);border:1px solid var(--purple);
+}
+.btn-secondary:hover{background:rgba(191,0,255,.1);box-shadow:0 0 24px rgba(191,0,255,.3);}
+
+/* SECTIONS */
+section{padding:100px 48px;max-width:1140px;margin:0 auto;}
+.section-label{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  color:var(--dim);letter-spacing:5px;text-transform:uppercase;margin-bottom:8px;
+}
+.section-title{
+  font-family:'Bebas Neue',sans-serif;font-size:clamp(36px,5vw,56px);
+  letter-spacing:4px;color:#fff;margin-bottom:50px;
+  position:relative;display:inline-block;
+}
+.section-title::after{
+  content:'';display:block;height:2px;margin-top:8px;
+  background:linear-gradient(90deg,var(--cyan),var(--purple),transparent);
+  box-shadow:0 0 6px var(--cyan);
 }
 
-.hero h1 {
-  font-size:3rem;
-  letter-spacing:5px;
-  text-shadow:0 0 20px #00f7ff;
+/* PROFILE */
+.profile-wrap{
+  display:grid;grid-template-columns:220px 1fr;
+  border:1px solid var(--border-purple);
+  background:rgba(8,8,20,.6);position:relative;
+}
+.profile-wrap::before{
+  content:'';position:absolute;inset:0;
+  box-shadow:0 0 60px rgba(191,0,255,.1),inset 0 0 60px rgba(191,0,255,.04);
+  pointer-events:none;
+}
+.profile-sidebar{
+  padding:36px 28px;border-right:1px solid var(--border-purple);
+  display:flex;flex-direction:column;gap:28px;
+}
+.sidebar-key{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  color:var(--dim);letter-spacing:2px;margin-bottom:6px;
+}
+.sidebar-val{
+  font-family:'Share Tech Mono',monospace;font-size:14px;
+  color:var(--cyan);letter-spacing:1px;font-weight:700;
+}
+.online-dot{
+  display:inline-block;width:8px;height:8px;
+  background:var(--green);border-radius:50%;margin-right:8px;
+  box-shadow:0 0 8px var(--green);animation:onlinePulse 2s infinite;
+}
+@keyframes onlinePulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+.profile-main{padding:36px 40px;position:relative;}
+.profile-main-top{
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;
+}
+.profile-main-title{
+  font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:4px;color:#fff;
+}
+.profile-active{
+  width:16px;height:16px;background:var(--green);
+  box-shadow:0 0 12px var(--green);
+}
+.profile-divider{
+  height:1px;
+  background:linear-gradient(90deg,var(--purple),transparent);
+  margin-bottom:24px;
+}
+.profile-bio{font-size:15px;color:var(--text);line-height:1.85;margin-bottom:24px;}
+.profile-tags{display:flex;flex-wrap:wrap;gap:10px;}
+.profile-tag{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  padding:6px 14px;border:1px solid var(--border);
+  color:var(--cyan);letter-spacing:2px;background:rgba(0,245,255,.04);
 }
 
-.btn {
-  padding:10px 20px;
-  margin:10px;
-  border:1px solid #00f7ff;
-  color:#00f7ff;
-  text-decoration:none;
-  transition:.3s;
+/* SKILLS */
+.skills-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+.skill-card{
+  background:rgba(8,8,20,.85);border:1px solid rgba(255,255,255,.07);
+  border-radius:4px;padding:26px 20px;
 }
-.btn:hover {
-  background:#00f7ff;
-  color:black;
+.skill-card-title{
+  font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:3px;
+  color:#fff;margin-bottom:20px;
+  display:flex;align-items:center;gap:10px;
 }
-
-/* GLASS */
-.glass {
-  background:rgba(255,255,255,0.05);
-  border:1px solid rgba(0,247,255,0.3);
-  backdrop-filter:blur(10px);
-  padding:20px;
-  margin:40px auto;
-  width:70%;
-  transition:.3s;
+.skill-card-title::before{
+  content:'';width:9px;height:9px;
+  background:var(--pink);box-shadow:0 0 10px var(--pink);flex-shrink:0;
 }
-.glass:hover {
-  transform:translateY(-10px);
-  box-shadow:0 0 20px #00f7ff;
+.skill-row{margin-bottom:15px;}
+.skill-row:last-child{margin-bottom:0;}
+.skill-name-row{
+  display:flex;justify-content:space-between;
+  font-family:'Share Tech Mono',monospace;font-size:11px;
+  color:#fff;margin-bottom:6px;
 }
-
-/* GRID */
-.grid {
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:20px;
+.skill-pct{color:var(--pink);}
+.skill-bar-bg{height:4px;background:rgba(255,255,255,.08);}
+.skill-bar-fill{
+  height:100%;width:0%;
+  background:linear-gradient(90deg,var(--purple),var(--pink));
+  transition:width 1.4s cubic-bezier(.4,0,.2,1);
 }
 
-/* CARDS */
-.card {
-  width:200px;
-  padding:20px;
-  border:1px solid #8a2be2;
-  transition:.3s;
+/* LEGENDARY */
+.legendary-wrap{
+  margin-top:26px;
+  border:1px solid rgba(255,230,0,.3);
+  background:linear-gradient(135deg,rgba(255,230,0,.04),rgba(191,0,255,.05),rgba(0,245,255,.03));
+  padding:36px 40px;text-align:center;
+  animation:legendGlow 3s infinite;position:relative;overflow:hidden;
 }
-.card:hover {
-  transform:rotateY(10deg) scale(1.05);
-  box-shadow:0 0 20px #8a2be2;
+.legendary-wrap::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--yellow),var(--purple),var(--cyan));
 }
-
-/* TIMELINE */
-.timeline {
-  width:60%;
-  margin:auto;
+@keyframes legendGlow{
+  0%,100%{box-shadow:0 0 16px rgba(255,230,0,.1);}
+  50%{box-shadow:0 0 40px rgba(255,230,0,.18),0 0 60px rgba(191,0,255,.1);}
 }
-.entry {
-  border-left:2px solid #00f7ff;
-  padding-left:15px;
-  margin:20px 0;
+.leg-badge{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  color:var(--yellow);letter-spacing:4px;margin-bottom:14px;
 }
-
-/* CONTACT */
-form {
-  width:300px;
-  margin:auto;
-  display:flex;
-  flex-direction:column;
+.leg-title{
+  font-family:'Bebas Neue',sans-serif;font-size:36px;
+  letter-spacing:5px;color:#fff;margin-bottom:14px;
 }
-input,textarea {
-  margin:10px 0;
-  padding:10px;
-  background:transparent;
-  border:1px solid #00f7ff;
-  color:white;
-}
-button {
-  padding:10px;
-  background:#00f7ff;
-  border:none;
+.leg-desc{font-size:14px;color:var(--text);line-height:1.8;max-width:580px;margin:0 auto 20px;}
+.leg-rarity{
+  display:inline-block;font-family:'Share Tech Mono',monospace;font-size:10px;
+  padding:5px 20px;border:1px solid var(--yellow);
+  color:var(--yellow);letter-spacing:3px;background:rgba(255,230,0,.06);
 }
 
-/* GLITCH */
-.glitch {
-  position:relative;
+/* PROGRESS */
+.progress-list{display:flex;flex-direction:column;gap:20px;}
+.prog-card{
+  background:rgba(8,8,20,.7);border:1px solid rgba(255,255,255,.07);
+  padding:30px 36px;position:relative;transition:border-color .3s,box-shadow .3s;
 }
-.glitch::before,
-.glitch::after {
-  content:attr(data-text);
-  position:absolute;
-  left:0;
+.prog-card:hover{
+  border-color:rgba(0,245,255,.2);
+  box-shadow:0 0 28px rgba(0,245,255,.07);
 }
-.glitch::before {
-  color:#f0f;
-  animation:glitch 1s infinite;
+.prog-num{
+  position:absolute;top:18px;right:26px;
+  font-family:'Bebas Neue',sans-serif;font-size:52px;letter-spacing:2px;
+  color:rgba(0,245,255,.05);pointer-events:none;
 }
-.glitch::after {
-  color:#0ff;
-  animation:glitch 1s infinite reverse;
+.prog-status{
+  display:inline-block;margin-bottom:12px;
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  padding:3px 10px;border:1px solid var(--green);
+  color:var(--green);letter-spacing:2px;
+  background:rgba(57,255,20,.06);animation:sblink 2.5s infinite;
 }
-@keyframes glitch {
-  0%{transform:translate(0)}
-  20%{transform:translate(-2px,2px)}
-  40%{transform:translate(-2px,-2px)}
-  60%{transform:translate(2px,2px)}
-  80%{transform:translate(2px,-2px)}
-  100%{transform:translate(0)}
+@keyframes sblink{0%,49%{opacity:1;}50%,100%{opacity:.5;}}
+.prog-title{
+  font-family:'Bebas Neue',sans-serif;font-size:22px;
+  letter-spacing:3px;color:#fff;margin-bottom:4px;
+}
+.prog-company{
+  font-family:'Share Tech Mono',monospace;font-size:12px;
+  color:var(--cyan);margin-bottom:4px;letter-spacing:1px;
+}
+.prog-date{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  color:var(--dim);margin-bottom:14px;letter-spacing:1px;
+}
+.prog-desc{font-size:14px;color:var(--text);line-height:1.75;}
+
+/* PROJECTS */
+.proj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;}
+.proj-card{
+  background:rgba(8,8,20,.7);border:1px solid rgba(255,255,255,.07);
+  padding:28px;position:relative;overflow:hidden;transition:all .3s;
+}
+.proj-card::before{
+  content:'';position:absolute;top:0;left:-100%;width:100%;height:2px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+  transition:left .5s;
+}
+.proj-card:hover::before{left:100%;}
+.proj-card:hover{
+  border-color:rgba(191,0,255,.3);
+  box-shadow:0 0 36px rgba(191,0,255,.1);transform:translateY(-4px);
+}
+.proj-type{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  color:var(--dim);letter-spacing:2px;margin-bottom:10px;
+}
+.proj-name{
+  font-family:'Bebas Neue',sans-serif;font-size:22px;
+  letter-spacing:2px;color:#fff;margin-bottom:12px;
+}
+.proj-desc{font-size:13px;color:var(--text);line-height:1.75;margin-bottom:18px;}
+.proj-tags{display:flex;flex-wrap:wrap;gap:8px;}
+.proj-tag{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  padding:3px 10px;border:1px solid rgba(191,0,255,.3);
+  color:var(--purple);background:rgba(191,0,255,.06);
+}
+.proj-incoming{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;min-height:200px;
+  border-style:dashed;border-color:rgba(0,245,255,.12);
+}
+.incoming-label{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  color:var(--dim);letter-spacing:3px;margin-bottom:10px;
+}
+.incoming-blink{
+  font-family:'Bebas Neue',sans-serif;font-size:16px;
+  letter-spacing:3px;color:var(--cyan);animation:blink 1.2s infinite;
+}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+/* ACHIEVEMENTS */
+.achieve-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px;}
+.ach-card{
+  background:rgba(8,8,20,.7);border:1px solid rgba(255,255,255,.07);
+  padding:20px 22px;display:flex;align-items:center;gap:16px;
+  position:relative;overflow:hidden;transition:all .3s;
+}
+.ach-card:hover{
+  border-color:rgba(255,230,0,.2);
+  box-shadow:0 0 24px rgba(255,230,0,.07);
+  transform:translateX(4px);
+}
+.ach-card::before{
+  content:'ACHIEVEMENT UNLOCKED';
+  position:absolute;top:6px;right:8px;
+  font-family:'Share Tech Mono',monospace;font-size:8px;
+  color:rgba(255,230,0,.28);letter-spacing:1px;
+}
+.ach-icon{font-size:26px;flex-shrink:0;}
+.ach-name{font-size:14px;font-weight:600;color:#fff;margin-bottom:2px;}
+.ach-org{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  color:var(--dim);letter-spacing:1px;
+}
+.ach-card.legendary{
+  border-color:rgba(255,230,0,.28);
+  background:linear-gradient(135deg,rgba(255,230,0,.05),rgba(191,0,255,.04));
+  animation:legendGlow 3s infinite;
+}
+.ach-card.legendary .ach-name{color:var(--yellow);}
+
+/* GAMING INLINE */
+.gaming-inline{
+  margin-top:28px;
+  background:rgba(8,8,20,.7);border:1px solid rgba(255,0,128,.13);
+  padding:30px 36px;position:relative;overflow:hidden;
+}
+.gaming-inline::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--pink),var(--purple),transparent);
+}
+.gaming-inline-label{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  color:var(--pink);letter-spacing:3px;margin-bottom:14px;
+}
+.gaming-text{
+  font-size:15px;color:var(--text);line-height:1.85;
+  border-left:3px solid var(--pink);padding-left:20px;
+}
+
+/* FOR COMMUNICATION */
+.comm-wrap{max-width:780px;margin:0 auto;}
+.comm-sub{
+  font-family:'Share Tech Mono',monospace;font-size:12px;
+  color:var(--dim);letter-spacing:2px;margin-bottom:28px;
+}
+.comm-top{display:flex;align-items:center;gap:36px;margin-bottom:32px;flex-wrap:wrap;}
+.comm-contact-item{
+  display:flex;align-items:center;gap:10px;
+  font-family:'Share Tech Mono',monospace;font-size:13px;
+  color:var(--cyan);letter-spacing:1px;text-decoration:none;
+  transition:opacity .2s;
+}
+.comm-contact-item:hover{opacity:.75;}
+.comm-contact-item svg{flex-shrink:0;opacity:.7;}
+
+.comm-form{display:flex;flex-direction:column;gap:0;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;}
+.form-group{display:flex;flex-direction:column;}
+.form-label{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  color:var(--cyan);letter-spacing:3px;padding:12px 18px 8px;
+  border-top:1px solid rgba(0,245,255,.18);
+  border-left:1px solid rgba(0,245,255,.18);
+}
+.form-row .form-group:last-child .form-label{
+  border-left:none;border-right:1px solid rgba(0,245,255,.18);
+}
+.form-input,.form-textarea{
+  background:#020208;border:none;
+  border-bottom:1px solid rgba(0,245,255,.18);
+  border-left:1px solid rgba(0,245,255,.18);
+  color:var(--text);font-family:'Share Tech Mono',monospace;font-size:12px;
+  padding:14px 18px;outline:none;letter-spacing:.5px;transition:background .2s;resize:none;
+}
+.form-row .form-group:last-child .form-input{
+  border-left:none;border-right:1px solid rgba(0,245,255,.18);
+}
+.form-input:focus,.form-textarea:focus{background:rgba(0,245,255,.04);}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--dim);}
+.msg-label{
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  color:var(--cyan);letter-spacing:3px;padding:12px 18px 8px;
+  border-top:1px solid rgba(0,245,255,.18);
+  border-left:1px solid rgba(0,245,255,.18);
+  border-right:1px solid rgba(0,245,255,.18);
+}
+.form-textarea{
+  border-left:1px solid rgba(0,245,255,.18);
+  border-right:1px solid rgba(0,245,255,.18);
+  border-bottom:none;min-height:130px;
+}
+.form-submit{
+  width:100%;padding:18px;
+  background:var(--cyan);color:#04040a;
+  font-family:'Share Tech Mono',monospace;font-size:13px;
+  letter-spacing:4px;border:none;cursor:none;font-weight:700;
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  transition:box-shadow .25s,transform .25s;
+}
+.form-submit:hover{
+  box-shadow:0 0 50px rgba(0,245,255,.5);transform:translateY(-2px);
+}
+
+/* FOOTER */
+footer{border-top:1px solid rgba(0,245,255,.08);padding:44px 48px;}
+.footer-grid{
+  display:grid;grid-template-columns:1.3fr 1fr 1fr 0.8fr;
+  gap:40px;max-width:1140px;margin:0 auto 0;
+}
+.footer-col-title{
+  font-family:'Bebas Neue',sans-serif;font-size:16px;
+  letter-spacing:3px;margin-bottom:16px;
+}
+.footer-col:nth-child(1) .footer-col-title{color:var(--cyan);}
+.footer-col:nth-child(2) .footer-col-title{color:var(--pink);}
+.footer-col:nth-child(3) .footer-col-title{color:var(--purple);}
+.footer-col:nth-child(4) .footer-col-title{color:var(--cyan);}
+.footer-desc{
+  font-family:'Share Tech Mono',monospace;font-size:11px;
+  color:var(--dim);line-height:1.8;margin-bottom:14px;letter-spacing:.5px;
+}
+.footer-contact-info{
+  font-family:'Share Tech Mono',monospace;font-size:11px;
+  color:var(--cyan);line-height:2.2;
+}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.footer-links a{
+  font-family:'Share Tech Mono',monospace;font-size:11px;
+  color:var(--dim);text-decoration:none;letter-spacing:1px;transition:color .2s;
+}
+.footer-links a:hover{color:var(--cyan);}
+.footer-bottom{
+  max-width:1140px;margin:28px auto 0;
+  border-top:1px solid rgba(255,255,255,.04);padding-top:18px;
+  font-family:'Share Tech Mono',monospace;font-size:10px;
+  color:var(--dim);letter-spacing:2px;
+}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .6s,transform .6s;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* RESPONSIVE */
+@media(max-width:1000px){
+  .skills-grid{grid-template-columns:repeat(2,1fr);}
+  .footer-grid{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:640px){
+  nav{padding:14px 20px;}
+  .nav-links{display:none;flex-direction:column;position:absolute;top:58px;left:0;right:0;
+    background:rgba(4,4,10,.97);padding:20px;border-bottom:1px solid rgba(0,245,255,.1);}
+  .nav-links.open{display:flex;}
+  .hamburger{display:flex;}
+  section{padding:80px 20px;}
+  .hero-name{font-size:clamp(48px,14vw,90px);}
+  .profile-wrap{grid-template-columns:1fr;}
+  .profile-sidebar{border-right:none;border-bottom:1px solid var(--border-purple);flex-direction:row;flex-wrap:wrap;gap:20px;}
+  .skills-grid{grid-template-columns:1fr;}
+  .form-row{grid-template-columns:1fr;}
+  .form-row .form-group:last-child .form-label{border-left:1px solid rgba(0,245,255,.18);border-right:none;}
+  .form-row .form-group:last-child .form-input{border-left:1px solid rgba(0,245,255,.18);border-right:none;}
+  .footer-grid{grid-template-columns:1fr;}
+  .comm-top{flex-direction:column;gap:14px;align-items:flex-start;}
 }
 </style>
 </head>
-
 <body>
 
-<canvas id="bg"></canvas>
-<div class="cursor"></div>
+<div id="cursor-ring"></div>
+<div id="cursor-dot"></div>
+<div id="xpbar"></div>
 
+<!-- NAV -->
 <nav>
-<a href="#home">HOME</a>
-<a href="#profile">PROFILE</a>
-<a href="#abilities">ABILITIES</a>
-<a href="#missions">MISSIONS</a>
-<a href="#progress">PROGRESS</a>
-<a href="#achievements">ACHIEVEMENTS</a>
-<a href="#contact">CONTACT</a>
+  <div class="nav-logo">M.SINGH</div>
+  <button class="hamburger" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links">
+    <li><a href="#hero">System Boot</a></li>
+    <li><a href="#profile">Profile</a></li>
+    <li><a href="#skills">Abilities</a></li>
+    <li><a href="#progress">Progress</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#achievements">Achievements</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
 </nav>
 
-<section id="home" class="hero">
-<h1 class="glitch" data-text="MANYA SINGH">MANYA SINGH</h1>
-<p id="typing"></p>
-<a href="#profile" class="btn">ENTER SYSTEM</a>
+<!-- HERO -->
+<section id="hero" style="padding-top:0;max-width:100%;margin:0;">
+  <div class="hero-content">
+    <h1 class="hero-name">MANYA SINGH</h1>
+    <div class="hero-tagline">Initializing Profile… Computer Science Student</div>
+    <div class="hero-sub">Data &amp; Interactive Systems</div>
+    <div class="hero-btns">
+      <a href="#profile" class="btn-primary">ENTER SYSTEM</a>
+      <a href="#contact" class="btn-secondary">CONTACT</a>
+    </div>
+  </div>
 </section>
 
-<section id="profile" class="glass">
-<h2>PLAYER PROFILE</h2>
-<p>Computer Science student passionate about data analytics, ML, and web systems.</p>
+<!-- PROFILE -->
+<section id="profile">
+  <div class="reveal">
+    <div class="section-label">> PLAYER.INFO</div>
+    <h2 class="section-title">PROFILE</h2>
+  </div>
+  <div class="profile-wrap reveal">
+    <div class="profile-sidebar">
+      <div>
+        <div class="sidebar-key">SYS.STATUS</div>
+        <div class="sidebar-val"><span class="online-dot"></span>ONLINE</div>
+      </div>
+      <div>
+        <div class="sidebar-key">ROLE.CLASS</div>
+        <div class="sidebar-val">CS STUDENT</div>
+      </div>
+      <div>
+        <div class="sidebar-key">EXP.LEVEL</div>
+        <div class="sidebar-val">INTERMEDIATE</div>
+      </div>
+      <div>
+        <div class="sidebar-key">LOCATION</div>
+        <div class="sidebar-val">PRAYAGRAJ, IN</div>
+      </div>
+    </div>
+    <div class="profile-main">
+      <div class="profile-main-top">
+        <div class="profile-main-title">PROFILE</div>
+        <div class="profile-active"></div>
+      </div>
+      <div class="profile-divider"></div>
+      <div class="profile-bio">
+        Computer Science student skilled in Python, data analysis, and visualization, with
+        experience in transforming data into actionable insights.
+        Proficient in prompt engineering and working with AI systems to generate optimized outputs.
+        Strong analytical mindset with an interest in interactive systems and gaming environments,
+        and a passion for solving real-world problems through data-driven solutions.
+      </div>
+      <div class="profile-tags">
+        <span class="profile-tag">MACHINE LEARNING</span>
+        <span class="profile-tag">PROMPT ENGINEERING</span>
+        <span class="profile-tag">DATA ANALYTICS</span>
+        <span class="profile-tag">PROBLEM SOLVING</span>
+      </div>
+    </div>
+  </div>
 </section>
 
-<section id="abilities">
-<h2 style="text-align:center;">ABILITIES</h2>
-<div class="grid">
-<div class="card">Programming</div>
-<div class="card">Tools</div>
-<div class="card">Data</div>
-<div class="card">Core</div>
-</div>
+<!-- SKILLS -->
+<section id="skills">
+  <div class="reveal">
+    <div class="section-label">> ABILITIES.EXE</div>
+    <h2 class="section-title">ABILITIES &amp; SKILLS</h2>
+  </div>
+  <div class="skills-grid reveal" id="skills-grid">
+    <div class="skill-card">
+      <div class="skill-card-title">PROGRAMMING</div>
+      <div class="skill-row"><div class="skill-name-row"><span>Python</span><span class="skill-pct">90%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-w="90"></div></div></div>
+      <div class="skill-row"><div class="skill-name-row"><span>HTML</span><span class="skill-pct">95%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-w="95"></div></div></div>
+      <div class="skill-row"><div class="skill-name-row"><span>CSS</span><span class="skill-pct">90%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-w="90"></div></div></div>
+      <div class="skill-row"><div class="skill-name-row"><span>JavaScript</span><span class="skill-pct">85%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-w="85"></div></div></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-title">TOOLS</div>
+      <div class="skill-row"><div class="skill-name-row"><span>VS Code</span><span class="skill-pct">95%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-w="95"></div></div></div>
+      <div class="skill-row"><div class="skill-name-row"><span>Jupyter</span><span class="skill-pct">85%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-w="85"></div></div></div>
+      <div class="skill-row"><div class="skill-name-row"><span>Excel</span><span class="skill-pct">80%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-w="80"></div></div></div>
+      <div class="skill-row"><div class="skill-name-row"><span>Canva</span><span class="skill-pct">75%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-w="75"></div></div></div>
+      <div class="skill-row"><div class="skill-name-row"><span>AWS</span><span class="skill-pct">65%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-w="65"></div></div></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-title">DATA TECH</div>
+      <div class="skill-row"><div class="skill-name-row"><span>Scikit-learn</span><span class="skill-pct">80%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-w="80"></div></div></div>
+      <div class="skill-row"><div class="skill-name-row"><span>Matplotlib</span><span class="skill-pct">85%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-w="85"></div></div></div>
+      <div class="skill-row"><div class="skill-name-row"><span>MySQL</span><span class="skill-pct">75%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-w="75"></div></div></div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-card-title">CORE CONCEPTS</div>
+      <div class="skill-row"><div class="skill-name-row"><span>DSA</span><span class="skill-pct">80%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-w="80"></div></div></div>
+      <div class="skill-row"><div class="skill-name-row"><span>Machine Learning</span><span class="skill-pct">75%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-w="75"></div></div></div>
+      <div class="skill-row"><div class="skill-name-row"><span>Data Analytics</span><span class="skill-pct">85%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-w="85"></div></div></div>
+      <div class="skill-row"><div class="skill-name-row"><span>Agile</span><span class="skill-pct">90%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" data-w="90"></div></div></div>
+    </div>
+  </div>
+  <div class="legendary-wrap reveal">
+    <div class="leg-badge">⚡ LEGENDARY ABILITY UNLOCKED ⚡</div>
+    <div class="leg-title">PROMPT ENGINEERING</div>
+    <div class="leg-desc">
+      While others write code, I engineer intelligence. My Prompt Engineering specialization
+      lets me direct AI models to solve complex problems, generate insights, and build solutions —
+      without writing a single line of traditional code. This is my superpower.
+    </div>
+    <div class="leg-rarity">✦ MYTHIC TIER · SPECIALIZATION CERTIFIED ✦</div>
+  </div>
 </section>
 
-<section id="missions">
-<h2 style="text-align:center;">MISSIONS</h2>
-<div class="grid">
-<div class="card">Say No To Mouse</div>
-<div class="card">Steganography</div>
-</div>
+<!-- PROGRESS -->
+<section id="progress">
+  <div class="reveal">
+    <div class="section-label">> MISSION.LOG</div>
+    <h2 class="section-title">PROGRESS</h2>
+  </div>
+  <div class="progress-list">
+    <div class="prog-card reveal">
+      <div class="prog-status">✓ COMPLETED</div>
+      <div class="prog-title">DATA ANALYTICS INTERN</div>
+      <div class="prog-company">Codec Technologies Pvt. Ltd.</div>
+      <div class="prog-date">// JUL 2025 – SEP 2025</div>
+      <div class="prog-desc">Analyzed real-world datasets to extract insights and identify trends. Collaborated in an industry-aligned training program, building hands-on experience with data pipelines and visualization tools.</div>
+      <div class="prog-num">01</div>
+    </div>
+    <div class="prog-card reveal">
+      <div class="prog-status">✓ COMPLETED</div>
+      <div class="prog-title">SOCIAL MEDIA MARKETING INTERN</div>
+      <div class="prog-company">Glimmio</div>
+      <div class="prog-date">// JUN 2025 – JUL 2025</div>
+      <div class="prog-desc">Developed and managed a social media analytics dashboard, leveraging performance insights to improve posting strategy. Drove 5,000+ monthly impressions and achieved 15% follower growth in just two months.</div>
+      <div class="prog-num">02</div>
+    </div>
+  </div>
 </section>
 
-<section id="progress" class="timeline">
-<h2>PROGRESS LOG</h2>
-<div class="entry">Data Analytics Intern</div>
-<div class="entry">Social Media Intern</div>
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="reveal">
+    <div class="section-label">> BUILD.LOG</div>
+    <h2 class="section-title">PROJECTS</h2>
+  </div>
+  <div class="proj-grid">
+    <div class="proj-card reveal">
+      <div class="proj-type">// INTERACTIVE WEB APPLICATION</div>
+      <div class="proj-name">SAY NO TO MOUSE</div>
+      <div class="proj-desc">Implemented keyboard event handling and focus traversal logic to enable complete website navigation using only the keyboard. Improved web accessibility and user experience by eliminating mouse dependency.</div>
+      <div class="proj-tags">
+        <span class="proj-tag">[Accessibility]</span>
+        <span class="proj-tag">[JavaScript]</span>
+        <span class="proj-tag">[UX]</span>
+      </div>
+    </div>
+    <div class="proj-card reveal">
+      <div class="proj-type">// SECURE DATA HIDING SYSTEM</div>
+      <div class="proj-name">STEGANOGRAPHY</div>
+      <div class="proj-desc">Developed backend algorithms for covert communication by concealing secret information within files. Strengthened data security by reducing exposure of sensitive information and preventing direct interception.</div>
+      <div class="proj-tags">
+        <span class="proj-tag">[Security]</span>
+        <span class="proj-tag">[Python]</span>
+        <span class="proj-tag">[Cryptography]</span>
+      </div>
+    </div>
+    <div class="proj-card proj-incoming reveal">
+      <div class="incoming-label">// INCOMING TRANSMISSION</div>
+      <div class="incoming-blink">[ NEXT PROJECT LOADING... ]</div>
+    </div>
+  </div>
 </section>
 
+<!-- ACHIEVEMENTS -->
 <section id="achievements">
-<h2 style="text-align:center;">ACHIEVEMENTS</h2>
-<div class="grid">
-<div class="card">AWS</div>
-<div class="card">Deloitte</div>
-<div class="card">Cisco</div>
-</div>
+  <div class="reveal">
+    <div class="section-label">> TROPHIES.DB</div>
+    <h2 class="section-title">ACHIEVEMENTS</h2>
+  </div>
+  <div class="achieve-grid">
+    <div class="ach-card legendary reveal">
+      <div class="ach-icon">⭐</div>
+      <div><div class="ach-name">Prompt Engineering Specialization</div><div class="ach-org">// LEGENDARY TIER</div></div>
+    </div>
+    <div class="ach-card reveal">
+      <div class="ach-icon">🏆</div>
+      <div><div class="ach-name">Solutions Architecture Job Simulation</div><div class="ach-org">// AWS</div></div>
+    </div>
+    <div class="ach-card reveal">
+      <div class="ach-icon">🛡️</div>
+      <div><div class="ach-name">Introduction to Cybersecurity</div><div class="ach-org">// CISCO NETWORKING ACADEMY</div></div>
+    </div>
+    <div class="ach-card reveal">
+      <div class="ach-icon">☁️</div>
+      <div><div class="ach-name">Cloud Computing Industrial Training</div><div class="ach-org">// INTERNSELITE</div></div>
+    </div>
+    <div class="ach-card reveal">
+      <div class="ach-icon">🔍</div>
+      <div><div class="ach-name">Cyber Job Simulation</div><div class="ach-org">// DELOITTE</div></div>
+    </div>
+    <div class="ach-card reveal">
+      <div class="ach-icon">🧠</div>
+      <div><div class="ach-name">Critical Thinking in the AI Era</div><div class="ach-org">// HP LIFE</div></div>
+    </div>
+    <div class="ach-card reveal">
+      <div class="ach-icon">📣</div>
+      <div><div class="ach-name">Strategic Digital Marketing</div><div class="ach-org">// IIDE</div></div>
+    </div>
+  </div>
+  <div class="gaming-inline reveal">
+    <div class="gaming-inline-label">// EXPLORING INTERACTIVE WORLDS</div>
+    <div class="gaming-text">
+      I enjoy playing games and exploring how interactive environments are designed.
+      I am highly interested in working in fields that combine technology, creativity, and
+      user experience — especially in gaming, interactive systems, or immersive digital experiences.
+    </div>
+  </div>
 </section>
 
+<!-- FOR COMMUNICATION -->
 <section id="contact">
-<h2 style="text-align:center;">CONTACT</h2>
-<form>
-<input placeholder="Name">
-<input placeholder="Email">
-<textarea placeholder="Message"></textarea>
-<button>SEND</button>
-</form>
+  <div class="reveal">
+    <div class="section-label">> COMMS.OPEN</div>
+    <h2 class="section-title">FOR COMMUNICATION</h2>
+  </div>
+  <div class="comm-wrap reveal">
+    <p class="comm-sub">Open a secure channel to discuss opportunities.</p>
+    <div class="comm-top">
+      <a href="mailto:manyasingh1106@gmail.com" class="comm-contact-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+        manyasingh1106@gmail.com
+      </a>
+      <a href="tel:+916307032599" class="comm-contact-item">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 010 1.17 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.16 6.16l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        6307032599
+      </a>
+    </div>
+    <div class="comm-form">
+      <div class="form-row">
+        <div class="form-group">
+          <div class="form-label">DESIGNATION / NAME</div>
+          <input class="form-input" type="text" placeholder="Enter your designation"/>
+        </div>
+        <div class="form-group">
+          <div class="form-label">EMAIL</div>
+          <input class="form-input" type="email" placeholder="Enter your email address"/>
+        </div>
+      </div>
+      <div class="msg-label">MESSAGE</div>
+      <textarea class="form-textarea" placeholder="Enter your transmission data..."></textarea>
+      <button class="form-submit">SEND MESSAGE ➤</button>
+    </div>
+  </div>
 </section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <div class="footer-col-title">MANYA SINGH</div>
+      <div class="footer-desc">Computer Science Student | Data &amp; Interactive Systems</div>
+      <div class="footer-contact-info">
+        manyasingh1106@gmail.com<br>6307032599
+      </div>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">MAIN DIRECTORY</div>
+      <ul class="footer-links">
+        <li><a href="#hero">System Boot</a></li>
+        <li><a href="#profile">Profile</a></li>
+        <li><a href="#skills">Abilities</a></li>
+        <li><a href="#projects">Projects</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">SYSTEM LOGS</div>
+      <ul class="footer-links">
+        <li><a href="#progress">Progress Log</a></li>
+        <li><a href="#achievements">Achievements</a></li>
+        <li><a href="#contact">For Communication</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title">RESOURCES</div>
+      <ul class="footer-links">
+        <li><a href="#">Download Resume</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2025 MANYA SINGH // PORTFOLIO v2.0 // BUILT WITH NEON &amp; INTENT
+  </div>
+</footer>
+
+<div id="particles" style="position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;"></div>
 
 <script>
-// CURSOR
-const cursor = document.querySelector(".cursor");
-document.addEventListener("mousemove", e=>{
-  cursor.style.top=e.clientY+"px";
-  cursor.style.left=e.clientX+"px";
+/* CURSOR */
+const ring=document.getElementById('cursor-ring');
+const cdot=document.getElementById('cursor-dot');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cdot.style.left=mx+'px';cdot.style.top=my+'px';});
+(function anim(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(anim);})();
+
+/* XP BAR */
+window.addEventListener('scroll',()=>{
+  const p=(window.scrollY/(document.body.scrollHeight-window.innerHeight))*100;
+  document.getElementById('xpbar').style.width=Math.min(p,100)+'%';
 });
 
-// TYPING
-const text="Initializing Profile...";
-let i=0;
-function type(){
-  if(i<text.length){
-    document.getElementById("typing").innerHTML+=text[i];
-    i++;
-    setTimeout(type,40);
-  }
+/* PARTICLES */
+const pc=document.getElementById('particles');
+const cols=['#00f5ff','#bf00ff','#ff0080','#39ff14'];
+for(let i=0;i<22;i++){
+  const p=document.createElement('div');
+  p.style.cssText=`position:absolute;width:${1+Math.random()*2}px;height:${1+Math.random()*2}px;
+    border-radius:50%;background:${cols[i%cols.length]};left:${Math.random()*100}%;
+    animation:floatUp ${6+Math.random()*10}s ${Math.random()*8}s linear infinite;opacity:0;`;
+  pc.appendChild(p);
 }
-type();
 
-// PARTICLES
-const canvas=document.getElementById("bg");
-const ctx=canvas.getContext("2d");
+/* REVEAL */
+const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');});},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
-
-let particles=[];
-for(let i=0;i<100;i++){
-  particles.push({
-    x:Math.random()*canvas.width,
-    y:Math.random()*canvas.height,
-    dx:Math.random()-0.5,
-    dy:Math.random()-0.5
+/* SKILL BARS */
+const sObs=new IntersectionObserver(e=>{
+  e.forEach(x=>{
+    if(x.isIntersecting)x.target.querySelectorAll('.skill-bar-fill').forEach(b=>{
+      setTimeout(()=>{b.style.width=b.dataset.w+'%';},200);
+    });
   });
-}
+},{threshold:.2});
+document.querySelectorAll('#skills-grid').forEach(g=>sObs.observe(g));
 
-function animate(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle="#00f7ff";
-
-  particles.forEach(p=>{
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,2,0,Math.PI*2);
-    ctx.fill();
-
-    p.x+=p.dx;
-    p.y+=p.dy;
-
-    if(p.x<0||p.x>canvas.width) p.dx*=-1;
-    if(p.y<0||p.y>canvas.height) p.dy*=-1;
-  });
-
-  requestAnimationFrame(animate);
-}
-animate();
+/* KONAMI */
+const k=[38,38,40,40,37,39,37,39,66,65];let ki=0;
+document.addEventListener('keydown',e=>{
+  if(e.keyCode===k[ki]){ki++;if(ki===k.length){
+    const m=document.createElement('div');
+    m.style.cssText=`position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+      background:#04040a;border:1px solid #ffe600;padding:28px 48px;z-index:99999;
+      font-family:'Share Tech Mono',monospace;font-size:18px;color:#ffe600;text-align:center;
+      box-shadow:0 0 60px rgba(255,230,0,.3);letter-spacing:3px;`;
+    m.innerHTML='KONAMI CODE ACTIVATED<br><span style="font-size:11px;color:#00f5ff;letter-spacing:2px;">+1000 XP BONUS UNLOCKED</span>';
+    document.body.appendChild(m);setTimeout(()=>m.remove(),2800);ki=0;
+  }}else ki=0;
+});
 </script>
-
 </body>
 </html>
