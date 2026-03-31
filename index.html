@@ -3,217 +3,307 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Manya Singh | AI Cyberpunk System</title>
+<title>Manya Singh | Cyber System</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
 
 <style>
-
-*{margin:0;padding:0;box-sizing:border-box}
-
-body{
-background:#030303;
-color:white;
-font-family:'Space Grotesk',sans-serif;
-overflow-x:hidden;
-cursor:none;
+body {
+  margin:0;
+  background:#05070a;
+  color:white;
+  font-family:'Space Grotesk',sans-serif;
+  overflow-x:hidden;
 }
 
-/* GRID */
-body::before{
-content:"";
-position:fixed;
-width:100%;
-height:100%;
-background:
-linear-gradient(rgba(0,255,255,0.05) 1px, transparent 1px),
-linear-gradient(90deg, rgba(255,0,255,0.05) 1px, transparent 1px);
-background-size:50px 50px;
-z-index:-2;
-}
-
-/* PARALLAX */
-.parallax{
-transform-style:preserve-3d;
-transition:transform 0.1s;
+/* PARTICLES */
+canvas {
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:-1;
 }
 
 /* CURSOR */
-.cursor{
-width:12px;height:12px;
-border:2px solid #00f7ff;
-border-radius:50%;
-position:fixed;
-pointer-events:none;
-z-index:9999;
-box-shadow:0 0 15px #00f7ff;
+.cursor {
+  width:15px;height:15px;
+  border-radius:50%;
+  background:#00f7ff;
+  position:fixed;
+  pointer-events:none;
+  box-shadow:0 0 20px #00f7ff;
+  z-index:999;
 }
 
 /* NAV */
-nav{
-position:fixed;
-left:20px;
-top:50%;
-transform:translateY(-50%);
-z-index:1000;
+nav {
+  position:fixed;
+  right:20px;
+  top:50%;
+  transform:translateY(-50%);
 }
 
-nav li{
-margin:20px 0;
-cursor:pointer;
-transition:0.3s;
+nav a {
+  display:block;
+  margin:10px 0;
+  color:#aaa;
+  text-decoration:none;
+  transition:.3s;
 }
-
-nav li:hover{
-color:#ff00ff;
-text-shadow:0 0 10px #ff00ff;
+nav a:hover {
+  color:#00f7ff;
+  text-shadow:0 0 10px #00f7ff;
 }
 
 /* HERO */
-.hero{
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-flex-direction:column;
+.hero {
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
 }
 
-.hero h1{
-font-size:4rem;
-text-shadow:0 0 25px #00f7ff;
+.hero h1 {
+  font-size:3rem;
+  letter-spacing:5px;
+  text-shadow:0 0 20px #00f7ff;
 }
 
-/* BUTTONS */
-.btn{
-padding:12px 25px;
-margin:10px;
-border:1px solid #00f7ff;
-background:none;
-color:#00f7ff;
-cursor:pointer;
-transition:0.2s;
+.btn {
+  padding:10px 20px;
+  margin:10px;
+  border:1px solid #00f7ff;
+  color:#00f7ff;
+  text-decoration:none;
+  transition:.3s;
 }
-
-.btn:hover{
-background:#00f7ff;
-color:black;
+.btn:hover {
+  background:#00f7ff;
+  color:black;
 }
 
 /* GLASS */
-.card{
-background:rgba(255,255,255,0.05);
-backdrop-filter:blur(15px);
-border:1px solid rgba(0,255,255,0.2);
-padding:30px;
-margin:30px;
+.glass {
+  background:rgba(255,255,255,0.05);
+  border:1px solid rgba(0,247,255,0.3);
+  backdrop-filter:blur(10px);
+  padding:20px;
+  margin:40px auto;
+  width:70%;
+  transition:.3s;
+}
+.glass:hover {
+  transform:translateY(-10px);
+  box-shadow:0 0 20px #00f7ff;
 }
 
-/* AI PANEL */
-.ai-box{
-position:fixed;
-bottom:20px;
-right:20px;
-width:250px;
-background:#000;
-border:1px solid #00f7ff;
-padding:15px;
+/* GRID */
+.grid {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:20px;
 }
 
-.ai-box input{
-width:100%;
-padding:8px;
-background:black;
-border:1px solid #00f7ff;
-color:white;
+/* CARDS */
+.card {
+  width:200px;
+  padding:20px;
+  border:1px solid #8a2be2;
+  transition:.3s;
+}
+.card:hover {
+  transform:rotateY(10deg) scale(1.05);
+  box-shadow:0 0 20px #8a2be2;
 }
 
+/* TIMELINE */
+.timeline {
+  width:60%;
+  margin:auto;
+}
+.entry {
+  border-left:2px solid #00f7ff;
+  padding-left:15px;
+  margin:20px 0;
+}
+
+/* CONTACT */
+form {
+  width:300px;
+  margin:auto;
+  display:flex;
+  flex-direction:column;
+}
+input,textarea {
+  margin:10px 0;
+  padding:10px;
+  background:transparent;
+  border:1px solid #00f7ff;
+  color:white;
+}
+button {
+  padding:10px;
+  background:#00f7ff;
+  border:none;
+}
+
+/* GLITCH */
+.glitch {
+  position:relative;
+}
+.glitch::before,
+.glitch::after {
+  content:attr(data-text);
+  position:absolute;
+  left:0;
+}
+.glitch::before {
+  color:#f0f;
+  animation:glitch 1s infinite;
+}
+.glitch::after {
+  color:#0ff;
+  animation:glitch 1s infinite reverse;
+}
+@keyframes glitch {
+  0%{transform:translate(0)}
+  20%{transform:translate(-2px,2px)}
+  40%{transform:translate(-2px,-2px)}
+  60%{transform:translate(2px,2px)}
+  80%{transform:translate(2px,-2px)}
+  100%{transform:translate(0)}
+}
 </style>
 </head>
 
 <body>
 
-<div class="cursor" id="cursor"></div>
+<canvas id="bg"></canvas>
+<div class="cursor"></div>
 
-<!-- NAV -->
 <nav>
-<ul>
-<li onclick="go('home')">HOME</li>
-<li onclick="go('profile')">PROFILE</li>
-<li onclick="go('contact')">CONTACT</li>
-</ul>
+<a href="#home">HOME</a>
+<a href="#profile">PROFILE</a>
+<a href="#abilities">ABILITIES</a>
+<a href="#missions">MISSIONS</a>
+<a href="#progress">PROGRESS</a>
+<a href="#achievements">ACHIEVEMENTS</a>
+<a href="#contact">CONTACT</a>
 </nav>
 
-<!-- HERO -->
-<section class="hero parallax" id="home">
-<h1>MANYA SINGH</h1>
+<section id="home" class="hero">
+<h1 class="glitch" data-text="MANYA SINGH">MANYA SINGH</h1>
 <p id="typing"></p>
-
-<button class="btn">ENTER SYSTEM</button>
-<button class="btn">CONTACT</button>
+<a href="#profile" class="btn">ENTER SYSTEM</a>
 </section>
 
-<!-- PROFILE -->
-<section id="profile">
-<div class="card">
-<h2>PROFILE</h2>
-<p>CS student exploring data, AI & interactive systems.</p>
+<section id="profile" class="glass">
+<h2>PLAYER PROFILE</h2>
+<p>Computer Science student passionate about data analytics, ML, and web systems.</p>
+</section>
+
+<section id="abilities">
+<h2 style="text-align:center;">ABILITIES</h2>
+<div class="grid">
+<div class="card">Programming</div>
+<div class="card">Tools</div>
+<div class="card">Data</div>
+<div class="card">Core</div>
 </div>
 </section>
 
-<!-- AI ASSISTANT -->
-<div class="ai-box">
-<p>AI Assistant</p>
-<input placeholder="Ask something..." onkeydown="reply(event)">
-<div id="ai-response"></div>
+<section id="missions">
+<h2 style="text-align:center;">MISSIONS</h2>
+<div class="grid">
+<div class="card">Say No To Mouse</div>
+<div class="card">Steganography</div>
 </div>
+</section>
+
+<section id="progress" class="timeline">
+<h2>PROGRESS LOG</h2>
+<div class="entry">Data Analytics Intern</div>
+<div class="entry">Social Media Intern</div>
+</section>
+
+<section id="achievements">
+<h2 style="text-align:center;">ACHIEVEMENTS</h2>
+<div class="grid">
+<div class="card">AWS</div>
+<div class="card">Deloitte</div>
+<div class="card">Cisco</div>
+</div>
+</section>
+
+<section id="contact">
+<h2 style="text-align:center;">CONTACT</h2>
+<form>
+<input placeholder="Name">
+<input placeholder="Email">
+<textarea placeholder="Message"></textarea>
+<button>SEND</button>
+</form>
+</section>
 
 <script>
+// CURSOR
+const cursor = document.querySelector(".cursor");
+document.addEventListener("mousemove", e=>{
+  cursor.style.top=e.clientY+"px";
+  cursor.style.left=e.clientX+"px";
+});
 
-/* typing */
-const text="Initializing system...";
+// TYPING
+const text="Initializing Profile...";
 let i=0;
 function type(){
-if(i<text.length){
-document.getElementById("typing").innerHTML+=text.charAt(i);
-i++;
-setTimeout(type,40);
-}}
+  if(i<text.length){
+    document.getElementById("typing").innerHTML+=text[i];
+    i++;
+    setTimeout(type,40);
+  }
+}
 type();
 
-/* cursor */
-const cursor=document.getElementById("cursor");
-document.addEventListener("mousemove",(e)=>{
-cursor.style.left=e.clientX+"px";
-cursor.style.top=e.clientY+"px";
-});
+// PARTICLES
+const canvas=document.getElementById("bg");
+const ctx=canvas.getContext("2d");
 
-/* parallax */
-document.addEventListener("mousemove",(e)=>{
-let x=(window.innerWidth/2 - e.clientX)/50;
-let y=(window.innerHeight/2 - e.clientY)/50;
-document.querySelectorAll(".parallax").forEach(el=>{
-el.style.transform=`rotateY(${x}deg) rotateX(${y}deg)`;
-});
-});
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
 
-/* scroll */
-function go(id){
-document.getElementById(id).scrollIntoView();
+let particles=[];
+for(let i=0;i<100;i++){
+  particles.push({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    dx:Math.random()-0.5,
+    dy:Math.random()-0.5
+  });
 }
 
-/* fake AI */
-function reply(e){
-if(e.key==="Enter"){
-let val=e.target.value.toLowerCase();
-let res="System ready.";
-if(val.includes("skills")) res="You have strong data & dev skills.";
-if(val.includes("project")) res="Check missions section.";
-document.getElementById("ai-response").innerText=res;
-e.target.value="";
-}
-}
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle="#00f7ff";
 
+  particles.forEach(p=>{
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,2,0,Math.PI*2);
+    ctx.fill();
+
+    p.x+=p.dx;
+    p.y+=p.dy;
+
+    if(p.x<0||p.x>canvas.width) p.dx*=-1;
+    if(p.y<0||p.y>canvas.height) p.dy*=-1;
+  });
+
+  requestAnimationFrame(animate);
+}
+animate();
 </script>
 
 </body>
